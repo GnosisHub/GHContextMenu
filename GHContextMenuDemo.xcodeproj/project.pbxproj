@@ -7,6 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		84EF2A4D189A298E0089D32D /* facebook-white@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84EF2A43189A298E0089D32D /* facebook-white@2x.png */; };
+		84EF2A4E189A298E0089D32D /* google-plus-white@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84EF2A44189A298E0089D32D /* google-plus-white@2x.png */; };
+		84EF2A4F189A298E0089D32D /* linkedin-white@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84EF2A45189A298E0089D32D /* linkedin-white@2x.png */; };
+		84EF2A50189A298E0089D32D /* pinterest-white@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84EF2A46189A298E0089D32D /* pinterest-white@2x.png */; };
+		84EF2A51189A298E0089D32D /* twitter-white@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84EF2A47189A298E0089D32D /* twitter-white@2x.png */; };
+		84EF2A52189A298E0089D32D /* facebook-white.png in Resources */ = {isa = PBXBuildFile; fileRef = 84EF2A48189A298E0089D32D /* facebook-white.png */; };
+		84EF2A53189A298E0089D32D /* google-plus-white.png in Resources */ = {isa = PBXBuildFile; fileRef = 84EF2A49189A298E0089D32D /* google-plus-white.png */; };
+		84EF2A54189A298E0089D32D /* linkedin-white.png in Resources */ = {isa = PBXBuildFile; fileRef = 84EF2A4A189A298E0089D32D /* linkedin-white.png */; };
+		84EF2A55189A298E0089D32D /* pinterest-white.png in Resources */ = {isa = PBXBuildFile; fileRef = 84EF2A4B189A298E0089D32D /* pinterest-white.png */; };
+		84EF2A56189A298E0089D32D /* twitter-white.png in Resources */ = {isa = PBXBuildFile; fileRef = 84EF2A4C189A298E0089D32D /* twitter-white.png */; };
+		84EF2A5D189BAF730089D32D /* GHCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84EF2A5C189BAF730089D32D /* GHCollectionViewController.m */; };
 		84F0C30718962C3F00870008 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84F0C30618962C3F00870008 /* Foundation.framework */; };
 		84F0C30918962C3F00870008 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84F0C30818962C3F00870008 /* CoreGraphics.framework */; };
 		84F0C30B18962C3F00870008 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84F0C30A18962C3F00870008 /* UIKit.framework */; };
@@ -21,6 +32,8 @@
 		84F0C32818962C3F00870008 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84F0C30A18962C3F00870008 /* UIKit.framework */; };
 		84F0C33018962C3F00870008 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 84F0C32E18962C3F00870008 /* InfoPlist.strings */; };
 		84F0C33218962C3F00870008 /* GHContextMenuTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F0C33118962C3F00870008 /* GHContextMenuTests.m */; };
+		84F0C33E18965E5700870008 /* GHContextMenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F0C33D18965E5700870008 /* GHContextMenuView.m */; };
+		84F0C3401896617200870008 /* twitter.png in Resources */ = {isa = PBXBuildFile; fileRef = 84F0C33F1896617200870008 /* twitter.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +47,18 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		84EF2A43189A298E0089D32D /* facebook-white@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "facebook-white@2x.png"; sourceTree = "<group>"; };
+		84EF2A44189A298E0089D32D /* google-plus-white@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "google-plus-white@2x.png"; sourceTree = "<group>"; };
+		84EF2A45189A298E0089D32D /* linkedin-white@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "linkedin-white@2x.png"; sourceTree = "<group>"; };
+		84EF2A46189A298E0089D32D /* pinterest-white@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pinterest-white@2x.png"; sourceTree = "<group>"; };
+		84EF2A47189A298E0089D32D /* twitter-white@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "twitter-white@2x.png"; sourceTree = "<group>"; };
+		84EF2A48189A298E0089D32D /* facebook-white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "facebook-white.png"; sourceTree = "<group>"; };
+		84EF2A49189A298E0089D32D /* google-plus-white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "google-plus-white.png"; sourceTree = "<group>"; };
+		84EF2A4A189A298E0089D32D /* linkedin-white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "linkedin-white.png"; sourceTree = "<group>"; };
+		84EF2A4B189A298E0089D32D /* pinterest-white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pinterest-white.png"; sourceTree = "<group>"; };
+		84EF2A4C189A298E0089D32D /* twitter-white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "twitter-white.png"; sourceTree = "<group>"; };
+		84EF2A5B189BAF730089D32D /* GHCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GHCollectionViewController.h; sourceTree = "<group>"; };
+		84EF2A5C189BAF730089D32D /* GHCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GHCollectionViewController.m; sourceTree = "<group>"; };
 		84F0C30318962C3F00870008 /* GHContextMenu.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GHContextMenu.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		84F0C30618962C3F00870008 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		84F0C30818962C3F00870008 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -53,6 +78,9 @@
 		84F0C32D18962C3F00870008 /* GHContextMenuTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GHContextMenuTests-Info.plist"; sourceTree = "<group>"; };
 		84F0C32F18962C3F00870008 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		84F0C33118962C3F00870008 /* GHContextMenuTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GHContextMenuTests.m; sourceTree = "<group>"; };
+		84F0C33C18965E5700870008 /* GHContextMenuView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GHContextMenuView.h; sourceTree = "<group>"; };
+		84F0C33D18965E5700870008 /* GHContextMenuView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GHContextMenuView.m; sourceTree = "<group>"; };
+		84F0C33F1896617200870008 /* twitter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = twitter.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +107,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		84EF2A42189A29790089D32D /* Menu images */ = {
+			isa = PBXGroup;
+			children = (
+				84EF2A43189A298E0089D32D /* facebook-white@2x.png */,
+				84EF2A44189A298E0089D32D /* google-plus-white@2x.png */,
+				84EF2A45189A298E0089D32D /* linkedin-white@2x.png */,
+				84EF2A46189A298E0089D32D /* pinterest-white@2x.png */,
+				84EF2A47189A298E0089D32D /* twitter-white@2x.png */,
+				84EF2A48189A298E0089D32D /* facebook-white.png */,
+				84EF2A49189A298E0089D32D /* google-plus-white.png */,
+				84EF2A4A189A298E0089D32D /* linkedin-white.png */,
+				84EF2A4B189A298E0089D32D /* pinterest-white.png */,
+				84EF2A4C189A298E0089D32D /* twitter-white.png */,
+			);
+			name = "Menu images";
+			sourceTree = "<group>";
+		};
 		84F0C2FA18962C3F00870008 = {
 			isa = PBXGroup;
 			children = (
@@ -112,11 +157,14 @@
 		84F0C30C18962C3F00870008 /* GHContextMenu */ = {
 			isa = PBXGroup;
 			children = (
+				84F0C33B18962C5100870008 /* ContextMenu */,
 				84F0C31518962C3F00870008 /* GHAppDelegate.h */,
 				84F0C31618962C3F00870008 /* GHAppDelegate.m */,
 				84F0C31818962C3F00870008 /* Main.storyboard */,
 				84F0C31B18962C3F00870008 /* GHViewController.h */,
 				84F0C31C18962C3F00870008 /* GHViewController.m */,
+				84EF2A5B189BAF730089D32D /* GHCollectionViewController.h */,
+				84EF2A5C189BAF730089D32D /* GHCollectionViewController.m */,
 				84F0C31E18962C3F00870008 /* Images.xcassets */,
 				84F0C30D18962C3F00870008 /* Supporting Files */,
 			);
@@ -126,6 +174,8 @@
 		84F0C30D18962C3F00870008 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				84F0C33F1896617200870008 /* twitter.png */,
+				84EF2A42189A29790089D32D /* Menu images */,
 				84F0C30E18962C3F00870008 /* GHContextMenu-Info.plist */,
 				84F0C30F18962C3F00870008 /* InfoPlist.strings */,
 				84F0C31218962C3F00870008 /* main.m */,
@@ -150,6 +200,15 @@
 				84F0C32E18962C3F00870008 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		84F0C33B18962C5100870008 /* ContextMenu */ = {
+			isa = PBXGroup;
+			children = (
+				84F0C33C18965E5700870008 /* GHContextMenuView.h */,
+				84F0C33D18965E5700870008 /* GHContextMenuView.m */,
+			);
+			name = ContextMenu;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -205,7 +264,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 84F0C2FE18962C3F00870008 /* Build configuration list for PBXProject "GHContextMenu" */;
+			buildConfigurationList = 84F0C2FE18962C3F00870008 /* Build configuration list for PBXProject "GHContextMenuDemo" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -229,9 +288,20 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84EF2A4F189A298E0089D32D /* linkedin-white@2x.png in Resources */,
+				84EF2A53189A298E0089D32D /* google-plus-white.png in Resources */,
+				84EF2A52189A298E0089D32D /* facebook-white.png in Resources */,
 				84F0C31F18962C3F00870008 /* Images.xcassets in Resources */,
+				84F0C3401896617200870008 /* twitter.png in Resources */,
+				84EF2A54189A298E0089D32D /* linkedin-white.png in Resources */,
+				84EF2A4D189A298E0089D32D /* facebook-white@2x.png in Resources */,
+				84EF2A55189A298E0089D32D /* pinterest-white.png in Resources */,
+				84EF2A51189A298E0089D32D /* twitter-white@2x.png in Resources */,
+				84EF2A4E189A298E0089D32D /* google-plus-white@2x.png in Resources */,
 				84F0C31118962C3F00870008 /* InfoPlist.strings in Resources */,
+				84EF2A56189A298E0089D32D /* twitter-white.png in Resources */,
 				84F0C31A18962C3F00870008 /* Main.storyboard in Resources */,
+				84EF2A50189A298E0089D32D /* pinterest-white@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -252,6 +322,8 @@
 			files = (
 				84F0C31318962C3F00870008 /* main.m in Sources */,
 				84F0C31D18962C3F00870008 /* GHViewController.m in Sources */,
+				84EF2A5D189BAF730089D32D /* GHCollectionViewController.m in Sources */,
+				84F0C33E18965E5700870008 /* GHContextMenuView.m in Sources */,
 				84F0C31718962C3F00870008 /* GHAppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -445,7 +517,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		84F0C2FE18962C3F00870008 /* Build configuration list for PBXProject "GHContextMenu" */ = {
+		84F0C2FE18962C3F00870008 /* Build configuration list for PBXProject "GHContextMenuDemo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				84F0C33318962C3F00870008 /* Debug */,
@@ -461,6 +533,7 @@
 				84F0C33718962C3F00870008 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		84F0C33818962C3F00870008 /* Build configuration list for PBXNativeTarget "GHContextMenuTests" */ = {
 			isa = XCConfigurationList;
@@ -469,6 +542,7 @@
 				84F0C33A18962C3F00870008 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
