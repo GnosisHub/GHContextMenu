@@ -2,7 +2,7 @@
 
 ![BackgroundImage](https://raw2.github.com/GnosisHub/GHContextMenu/master/cmov.gif)
 ![BackgroundImage](https://raw2.github.com/GnosisHub/GHContextMenu/master/cmocv.gif)
-![BackgroundImage](https://raw2.github.com/GnosisHub/GHContextMenu/master/cmov5.gif)
+![BackgroundImage](https://raw2.github.com/GnosisHub/GHContextMenu/master/cmocv5.gif)
 
 This is user friendly solution for showing context menu upon long press. It is inspired from the Pinterest iOS app
 
