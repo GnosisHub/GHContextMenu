@@ -8,6 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
+typedef NS_ENUM(NSInteger, GHContextMenuActionType){
+    // Default
+    GHContextMenuActionTypePan,
+    // Allows tap action in order to trigger an action
+    GHContextMenuActionTypeTap
+};
+
 @protocol GHContextOverlayViewDataSource;
 @protocol GHContextOverlayViewDelegate;
 
@@ -15,6 +22,8 @@
 
 @property (nonatomic, assign) id<GHContextOverlayViewDataSource> dataSource;
 @property (nonatomic, assign) id<GHContextOverlayViewDelegate> delegate;
+
+@property (nonatomic, assign) GHContextMenuActionType menuActionType;
 
 - (void) longPressDetected:(UIGestureRecognizer*) gestureRecognizer;
 
