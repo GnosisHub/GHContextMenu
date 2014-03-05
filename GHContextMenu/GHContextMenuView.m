@@ -93,37 +93,55 @@ CGFloat const   GHAnimationDelay = GHAnimationDuration/5;
 #pragma mark Layer Touch Tracking
 #pragma mark -
 
--(CALayer *)layerForTouch:(UITouch *)touch {
-    CGPoint location = [self convertPoint:[touch locationInView:self] toView:nil];
-    CALayer *primaryLayer = [self.layer.presentationLayer hitTest:location];
+-(NSInteger)indexOfClosestMatchToLayer:(CALayer *)layer atPoint:(CGPoint)point {
 
-    return primaryLayer ? primaryLayer.modelLayer: nil;
+    NSUInteger totalItems = self.menuItems.count;
+
+    CGFloat comparedX = 0;
+    CGFloat comparedY = 0;
+    CGFloat sizeToMatch = 40;
+
+    for( int i = 0; i < totalItems; i++ ) {
+        CALayer *comparingLayer = self.menuItems[i];
+
+        comparedX = point.x - comparingLayer.position.x;
+        comparedY = point.y - comparingLayer.position.y;
+
+        if( comparedX >= 0 && comparedY >= 0 && comparedX <= sizeToMatch && comparedY <= sizeToMatch ) {
+            return i;
+        }
+    }
+
+    return -1;
 }
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
 
-    // Nothing to do if the action type is for Pan
-    if( self.menuActionType == GHContextMenuActionTypePan ) {
-    	return;
-    }
+    CGPoint menuAtPoint = CGPointZero;
 
-    UITouch *touch = [touches anyObject];
-    CALayer *layer = [self layerForTouch:touch];
+    if ([touches count] == 1) {
 
-    if( layer != nil ) {
+        UITouch *touch = (UITouch *)[touches anyObject];
+        CGPoint touchPoint = [touch locationInView:touch.view];
+        touchPoint = [touch.view convertPoint:touchPoint toView:nil];
 
-        CGFloat angle = [self angleBeweenStartinPoint:self.longPressLocation endingPoint:layer.position];
-        NSInteger closeToIndex = [self indexOfLayerCloseAngle:angle];
+        CALayer *layer = [[(CALayer *)self.layer.presentationLayer hitTest:touchPoint] modelLayer];
+        if( layer != nil ) {
 
-        if((self.prevIndex >= 0 && self.prevIndex != closeToIndex)) {
-            [self resetPreviousSelection];
+            NSInteger menuItemIndex = [self indexOfClosestMatchToLayer:layer atPoint:touchPoint];
+
+            if( (self.prevIndex >= 0 && self.prevIndex != menuItemIndex)) {
+                [self resetPreviousSelection];
+            }
+            self.prevIndex = menuItemIndex;
+
+            menuAtPoint = layer.position;
         }
-
-        self.prevIndex = closeToIndex;
-
-        [self dismissWithSelectedIndexForMenuAtPoint: layer.position];
     }
+
+    [self dismissWithSelectedIndexForMenuAtPoint: menuAtPoint];
 }
+
 
 
 #pragma mark -
@@ -343,7 +361,14 @@ CGFloat const   GHAnimationDelay = GHAnimationDuration/5;
     if (self.isShowing && self.isPaning) {
         
         CGFloat angle = [self angleBeweenStartinPoint:self.longPressLocation endingPoint:self.curretnLocation];
-        NSInteger closeToIndex = [self indexOfLayerCloseAngle:angle];
+        NSInteger closeToIndex = -1;
+        for (int i = 0; i < self.menuItems.count; i++) {
+            GHMenuItemLocation* itemLocation = [self.itemLocations objectAtIndex:i];
+            if (fabs(itemLocation.angle - angle) < self.angleBetweenItems/2) {
+                closeToIndex = i;
+                break;
+            }
+        }
         
         if (closeToIndex >= 0 && closeToIndex < self.menuItems.count) {
             
