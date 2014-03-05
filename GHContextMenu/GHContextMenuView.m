@@ -68,7 +68,10 @@ CGFloat const   GHAnimationDelay = GHAnimationDuration/5;
 //        _longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressDetected:)];
 //        [self addGestureRecognizer:_longPressRecognizer];
         self.backgroundColor  = [UIColor clearColor];
-        
+
+        // Default the menuActionType to Pan (original/default)
+        _menuActionType = GHContextMenuActionTypePan;
+
         displayLink = [CADisplayLink displayLinkWithTarget:self
                                                   selector:@selector(highlightMenuItemForPoint)];
         
@@ -86,6 +89,57 @@ CGFloat const   GHAnimationDelay = GHAnimationDuration/5;
     return self;
 }
 
+#pramga mark -
+#pramga mark Layer Touch Tracking
+#pramga mark -
+
+-(CALayer *)layerForTouch:(UITouch *)touch {
+    CGPoint location = [self convertPoint:[touch locationInView:self] toView:nil];
+    CALayer *primaryLayer = [self.layer.presentationLayer hitTest:location];
+
+    return primaryLayer ? primaryLayer.modelLayer: nil;
+}
+
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+
+    // Nothing to do if the action type is for Pan
+    if( self.menuActionType == GHContextMenuActionTypePan ) {
+    	return;
+    }
+
+    UITouch *touch = [touches anyObject];
+    CALayer *layer = [self layerForTouch:touch];
+
+    if( layer != nil ) {
+
+        CGFloat angle = [self angleBeweenStartinPoint:self.longPressLocation endingPoint:layer.position];
+        NSInteger closeToIndex = [self indexOfLayerCloseAngle:angle];
+
+        if((self.prevIndex >= 0 && self.prevIndex != closeToIndex)) {
+            [self resetPreviousSelection];
+        }
+
+        self.prevIndex = closeToIndex;
+
+        [self dismissWithSelectedIndexForMenuAtPoint: layer.position];
+    }
+}
+
+
+#pragma mark -
+#pragma mark LongPress handler
+#pragma mark -
+
+// Split this out of the longPressDetected so that we can reuse it with touchesBegan (above)
+-(void)dismissWithSelectedIndexForMenuAtPoint:(CGPoint)point {
+
+    if(self.delegate && [self.delegate respondsToSelector:@selector(didSelectItemAtIndex: forMenuAtPoint:)] && self.prevIndex >= 0){
+        [self.delegate didSelectItemAtIndex:self.prevIndex forMenuAtPoint:point];
+        self.prevIndex = -1;
+    }
+
+    [self hideMenu];
+}
 
 - (void) longPressDetected:(UIGestureRecognizer*) gestureRecognizer
 {
@@ -112,12 +166,10 @@ CGFloat const   GHAnimationDelay = GHAnimationDuration/5;
         }
     }
     
-    if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
-        if(self.delegate && [self.delegate respondsToSelector:@selector(didSelectItemAtIndex: forMenuAtPoint:)] && self.prevIndex >= 0){
-            [self.delegate didSelectItemAtIndex:self.prevIndex forMenuAtPoint:[self convertPoint:self.longPressLocation toView:gestureRecognizer.view]];
-            self.prevIndex = -1;
-        }
-        [self hideMenu];
+    // Only trigger if we're using the GHContextMenuActionTypePan (default)
+    if( gestureRecognizer.state == UIGestureRecognizerStateEnded && self.menuActionType == GHContextMenuActionTypePan ) {
+        CGPoint menuAtPoint = [self convertPoint:self.longPressLocation toView:gestureRecognizer.view];
+        [self dismissWithSelectedIndexForMenuAtPoint:menuAtPoint];
     }
 }
 
@@ -271,19 +323,27 @@ CGFloat const   GHAnimationDelay = GHAnimationDuration/5;
 
 # pragma mark - animation and selection
 
+// Split this out of highlightMenuItemForPoint for reuse with touchesBegan (above)
+-(NSInteger)indexOfLayerCloseAngle:(CGFloat)angle {
+
+    NSInteger closeToIndex = -1;
+    for (int i = 0; i < self.menuItems.count; i++) {
+        GHMenuItemLocation* itemLocation = [self.itemLocations objectAtIndex:i];
+        if (fabs(itemLocation.angle - angle) < self.angleBetweenItems/2) {
+            closeToIndex = i;
+            break;
+        }
+    }
+
+    return closeToIndex;
+}
+
 -  (void) highlightMenuItemForPoint
 {
     if (self.isShowing && self.isPaning) {
         
         CGFloat angle = [self angleBeweenStartinPoint:self.longPressLocation endingPoint:self.curretnLocation];
-        NSInteger closeToIndex = -1;
-        for (int i = 0; i < self.menuItems.count; i++) {
-            GHMenuItemLocation* itemLocation = [self.itemLocations objectAtIndex:i];
-            if (fabs(itemLocation.angle - angle) < self.angleBetweenItems/2) {
-                closeToIndex = i;
-                break;
-            }
-        }
+        NSInteger closeToIndex = [self indexOfLayerCloseAngle:angle];
         
         if (closeToIndex >= 0 && closeToIndex < self.menuItems.count) {
             
