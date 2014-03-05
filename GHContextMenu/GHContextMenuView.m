@@ -341,21 +341,6 @@ CGFloat const   GHAnimationDelay = GHAnimationDuration/5;
 
 # pragma mark - animation and selection
 
-// Split this out of highlightMenuItemForPoint for reuse with touchesBegan (above)
--(NSInteger)indexOfLayerCloseAngle:(CGFloat)angle {
-
-    NSInteger closeToIndex = -1;
-    for (int i = 0; i < self.menuItems.count; i++) {
-        GHMenuItemLocation* itemLocation = [self.itemLocations objectAtIndex:i];
-        if (fabs(itemLocation.angle - angle) < self.angleBetweenItems/2) {
-            closeToIndex = i;
-            break;
-        }
-    }
-
-    return closeToIndex;
-}
-
 -  (void) highlightMenuItemForPoint
 {
     if (self.isShowing && self.isPaning) {
