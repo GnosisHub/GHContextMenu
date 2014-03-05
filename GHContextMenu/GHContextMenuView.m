@@ -89,9 +89,9 @@ CGFloat const   GHAnimationDelay = GHAnimationDuration/5;
     return self;
 }
 
-#pramga mark -
-#pramga mark Layer Touch Tracking
-#pramga mark -
+#pragma mark -
+#pragma mark Layer Touch Tracking
+#pragma mark -
 
 -(CALayer *)layerForTouch:(UITouch *)touch {
     CGPoint location = [self convertPoint:[touch locationInView:self] toView:nil];
