@@ -99,6 +99,7 @@ CGFloat const   GHAnimationDelay = GHAnimationDuration/5;
             return;
         }
         
+        self.frame = [[UIScreen mainScreen] applicationFrame];
         self.layer.backgroundColor = [UIColor colorWithWhite:0.1f alpha:.8f].CGColor;
         self.isShowing = YES;
         [self animateMenu:YES];
@@ -200,6 +201,15 @@ CGFloat const   GHAnimationDelay = GHAnimationDuration/5;
     for (int i = 0; i < self.menuItems.count; i++) {
         GHMenuItemLocation *location = [self locationForItemAtIndex:i];
         [self.itemLocations addObject:location];
+        
+        CALayer* layer = (CALayer*) [self.menuItems objectAtIndex:i];
+        layer.transform = CATransform3DIdentity;
+       
+        // Rotate menu items based on orientation
+        if (UIDeviceOrientationIsLandscape([UIDevice currentDevice].orientation)) {
+            CGFloat angle = [UIDevice currentDevice].orientation == UIDeviceOrientationLandscapeLeft ? M_PI_2 : -M_PI_2;
+            layer.transform = CATransform3DRotate(CATransform3DIdentity, angle, 0, 0, 1);
+        }
     }
 }
 
