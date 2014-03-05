@@ -68,7 +68,10 @@ CGFloat const   GHAnimationDelay = GHAnimationDuration/5;
 //        _longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressDetected:)];
 //        [self addGestureRecognizer:_longPressRecognizer];
         self.backgroundColor  = [UIColor clearColor];
-        
+
+        // Default the menuActionType to Pan (original/default)
+        _menuActionType = GHContextMenuActionTypePan;
+
         displayLink = [CADisplayLink displayLinkWithTarget:self
                                                   selector:@selector(highlightMenuItemForPoint)];
         
@@ -86,6 +89,75 @@ CGFloat const   GHAnimationDelay = GHAnimationDuration/5;
     return self;
 }
 
+#pragma mark -
+#pragma mark Layer Touch Tracking
+#pragma mark -
+
+-(NSInteger)indexOfClosestMatchToLayer:(CALayer *)layer atPoint:(CGPoint)point {
+
+    NSUInteger totalItems = self.menuItems.count;
+
+    CGFloat comparedX = 0;
+    CGFloat comparedY = 0;
+    CGFloat sizeToMatch = 40;
+
+    for( int i = 0; i < totalItems; i++ ) {
+        CALayer *comparingLayer = self.menuItems[i];
+
+        comparedX = point.x - comparingLayer.position.x;
+        comparedY = point.y - comparingLayer.position.y;
+
+        if( comparedX >= 0 && comparedY >= 0 && comparedX <= sizeToMatch && comparedY <= sizeToMatch ) {
+            return i;
+        }
+    }
+
+    return -1;
+}
+
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+
+    CGPoint menuAtPoint = CGPointZero;
+
+    if ([touches count] == 1) {
+
+        UITouch *touch = (UITouch *)[touches anyObject];
+        CGPoint touchPoint = [touch locationInView:touch.view];
+        touchPoint = [touch.view convertPoint:touchPoint toView:nil];
+
+        CALayer *layer = [[(CALayer *)self.layer.presentationLayer hitTest:touchPoint] modelLayer];
+        if( layer != nil ) {
+
+            NSInteger menuItemIndex = [self indexOfClosestMatchToLayer:layer atPoint:touchPoint];
+
+            if( (self.prevIndex >= 0 && self.prevIndex != menuItemIndex)) {
+                [self resetPreviousSelection];
+            }
+            self.prevIndex = menuItemIndex;
+
+            menuAtPoint = layer.position;
+        }
+    }
+
+    [self dismissWithSelectedIndexForMenuAtPoint: menuAtPoint];
+}
+
+
+
+#pragma mark -
+#pragma mark LongPress handler
+#pragma mark -
+
+// Split this out of the longPressDetected so that we can reuse it with touchesBegan (above)
+-(void)dismissWithSelectedIndexForMenuAtPoint:(CGPoint)point {
+
+    if(self.delegate && [self.delegate respondsToSelector:@selector(didSelectItemAtIndex: forMenuAtPoint:)] && self.prevIndex >= 0){
+        [self.delegate didSelectItemAtIndex:self.prevIndex forMenuAtPoint:point];
+        self.prevIndex = -1;
+    }
+
+    [self hideMenu];
+}
 
 - (void) longPressDetected:(UIGestureRecognizer*) gestureRecognizer
 {
@@ -113,12 +185,10 @@ CGFloat const   GHAnimationDelay = GHAnimationDuration/5;
         }
     }
     
-    if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
-        if(self.delegate && [self.delegate respondsToSelector:@selector(didSelectItemAtIndex: forMenuAtPoint:)] && self.prevIndex >= 0){
-            [self.delegate didSelectItemAtIndex:self.prevIndex forMenuAtPoint:[self convertPoint:self.longPressLocation toView:gestureRecognizer.view]];
-            self.prevIndex = -1;
-        }
-        [self hideMenu];
+    // Only trigger if we're using the GHContextMenuActionTypePan (default)
+    if( gestureRecognizer.state == UIGestureRecognizerStateEnded && self.menuActionType == GHContextMenuActionTypePan ) {
+        CGPoint menuAtPoint = [self convertPoint:self.longPressLocation toView:gestureRecognizer.view];
+        [self dismissWithSelectedIndexForMenuAtPoint:menuAtPoint];
     }
 }
 
