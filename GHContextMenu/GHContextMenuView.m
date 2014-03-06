@@ -179,7 +179,7 @@ CGFloat const   GHAnimationDelay = GHAnimationDuration/5;
     }
     
     if (gestureRecognizer.state == UIGestureRecognizerStateChanged) {
-        if (self.isShowing) {
+        if (self.isShowing && self.menuActionType == GHContextMenuActionTypePan) {
             self.isPaning = YES;
             self.curretnLocation =  [gestureRecognizer locationInView:self];
         }
