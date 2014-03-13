@@ -93,27 +93,18 @@ CGFloat const   GHAnimationDelay = GHAnimationDuration/5;
 #pragma mark Layer Touch Tracking
 #pragma mark -
 
--(NSInteger)indexOfClosestMatchToLayer:(CALayer *)layer atPoint:(CGPoint)point {
-
-    NSUInteger totalItems = self.menuItems.count;
-
-    CGFloat comparedX = 0;
-    CGFloat comparedY = 0;
-    CGFloat sizeToMatch = 40;
-
-    for( int i = 0; i < totalItems; i++ ) {
-        CALayer *comparingLayer = self.menuItems[i];
-
-        comparedX = point.x - comparingLayer.position.x;
-        comparedY = point.y - comparingLayer.position.y;
-
-        if( comparedX >= 0 && comparedY >= 0 && comparedX <= sizeToMatch && comparedY <= sizeToMatch ) {
+-(NSInteger)indexOfClosestMatchAtPoint:(CGPoint)point {
+    int i = 0;
+    for( CALayer *menuItemLayer in self.menuItems ) {
+        if( CGRectContainsPoint( menuItemLayer.frame, point ) ) {
+            NSLog( @"Touched Layer at index: %i", i);
             return i;
         }
+        i++;
     }
-
     return -1;
 }
+
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
 
@@ -122,26 +113,21 @@ CGFloat const   GHAnimationDelay = GHAnimationDuration/5;
     if ([touches count] == 1) {
 
         UITouch *touch = (UITouch *)[touches anyObject];
-        CGPoint touchPoint = [touch locationInView:touch.view];
-        touchPoint = [touch.view convertPoint:touchPoint toView:nil];
+        CGPoint touchPoint = [touch locationInView:self];
 
-        CALayer *layer = [[(CALayer *)self.layer.presentationLayer hitTest:touchPoint] modelLayer];
-        if( layer != nil ) {
-
-            NSInteger menuItemIndex = [self indexOfClosestMatchToLayer:layer atPoint:touchPoint];
-
-            if( (self.prevIndex >= 0 && self.prevIndex != menuItemIndex)) {
-                [self resetPreviousSelection];
-            }
-            self.prevIndex = menuItemIndex;
-
-            menuAtPoint = layer.position;
+        NSInteger menuItemIndex = [self indexOfClosestMatchAtPoint:touchPoint];
+        if( menuItemIndex > -1 ) {
+            menuAtPoint = [(CALayer *)self.menuItems[(NSUInteger)menuItemIndex] position];
         }
+
+        if( (self.prevIndex >= 0 && self.prevIndex != menuItemIndex)) {
+            [self resetPreviousSelection];
+        }
+        self.prevIndex = menuItemIndex;
     }
 
     [self dismissWithSelectedIndexForMenuAtPoint: menuAtPoint];
 }
-
 
 
 #pragma mark -
