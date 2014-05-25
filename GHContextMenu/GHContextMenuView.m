@@ -150,12 +150,13 @@ CGFloat const   GHAnimationDelay = GHAnimationDuration/5;
     if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
         self.prevIndex = -1;
         
-        [[UIApplication sharedApplication].keyWindow addSubview:self];
-        self.longPressLocation = [gestureRecognizer locationInView:self];
         CGPoint pointInView = [gestureRecognizer locationInView:gestureRecognizer.view];
         if (self.dataSource != nil && [self.dataSource respondsToSelector:@selector(shouldShowMenuAtPoint:)] && ![self.dataSource shouldShowMenuAtPoint:pointInView]){
             return;
         }
+        
+        [[UIApplication sharedApplication].keyWindow addSubview:self];
+        self.longPressLocation = [gestureRecognizer locationInView:self];
         
         self.frame = [[UIScreen mainScreen] applicationFrame];
         self.layer.backgroundColor = [UIColor colorWithWhite:0.1f alpha:.8f].CGColor;
