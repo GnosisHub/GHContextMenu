@@ -61,7 +61,6 @@ CGFloat const   GHAnimationDelay = GHAnimationDuration/5;
 
 - (id)init
 {
-//    self = [super initWithFrame:[[UIScreen mainScreen] applicationFrame]];
     self = [super initWithFrame:[[UIScreen mainScreen] bounds]];
     if (self) {
         // Initialization code
