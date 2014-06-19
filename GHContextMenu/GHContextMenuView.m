@@ -61,7 +61,8 @@ CGFloat const   GHAnimationDelay = GHAnimationDuration/5;
 
 - (id)init
 {
-    self = [super initWithFrame:[[UIScreen mainScreen] applicationFrame]];
+//    self = [super initWithFrame:[[UIScreen mainScreen] applicationFrame]];
+    self = [super initWithFrame:[[UIScreen mainScreen] bounds]];
     if (self) {
         // Initialization code
         self.userInteractionEnabled = YES;
@@ -158,7 +159,6 @@ CGFloat const   GHAnimationDelay = GHAnimationDuration/5;
         [[UIApplication sharedApplication].keyWindow addSubview:self];
         self.longPressLocation = [gestureRecognizer locationInView:self];
         
-        self.frame = [[UIScreen mainScreen] applicationFrame];
         self.layer.backgroundColor = [UIColor colorWithWhite:0.1f alpha:.8f].CGColor;
         self.isShowing = YES;
         [self animateMenu:YES];
