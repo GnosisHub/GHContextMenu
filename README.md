@@ -1,8 +1,8 @@
 #GHContextMenu - Pinterest like context menu control for iOS
 
-![BackgroundImage](https://raw2.github.com/GnosisHub/GHContextMenu/master/cmov.gif)
-![BackgroundImage](https://raw2.github.com/GnosisHub/GHContextMenu/master/cmocv.gif)
-![BackgroundImage](https://raw2.github.com/GnosisHub/GHContextMenu/master/cmocv5.gif)
+![alt tag](https://github.com/GnosisHub/GHContextMenu/blob/master/cmocv.gif)
+![alt tag](https://github.com/GnosisHub/GHContextMenu/blob/master/cmocv5.gif)
+![alt tag](https://github.com/GnosisHub/GHContextMenu/blob/master/cmov.gif)
 
 This is user friendly solution for showing context menu upon long press. It is inspired from the Pinterest iOS app
 
