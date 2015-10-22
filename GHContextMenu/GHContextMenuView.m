@@ -52,7 +52,7 @@ CGFloat const   GHAnimationDelay = GHAnimationDuration/5;
 @property (nonatomic, strong) NSMutableArray* itemLocations;
 @property (nonatomic) NSInteger prevIndex;
 
-@property (nonatomic) CGColorRef itemBGHighlightedColor;
+@property (nonatomic, strong) __attribute__ ((NSObject)) CGColorRef itemBGHighlightedColor;
 @property (nonatomic) CGColorRef itemBGColor;
 
 @end
@@ -83,7 +83,7 @@ CGFloat const   GHAnimationDelay = GHAnimationDuration/5;
         _radius = 90;
         
         self.itemBGColor = [UIColor grayColor].CGColor;
-        self.itemBGHighlightedColor = [UIColor redColor].CGColor;
+        self.itemBGHighlightedColor = [UIColor colorWithRed:0.9451 green:0.9451 blue:0.9451 alpha:1.0].CGColor;
         
     }
     return self;
