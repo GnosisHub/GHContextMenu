@@ -25,6 +25,15 @@ Sample app contains examples of how to add context menu for UIView and UICollect
     UILongPressGestureRecognizer* _longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:overlay action:@selector(longPressDetected:)];
     [self.view addGestureRecognizer:_longPressRecognizer];
 
+// 3D touch
+    GHContextMenuView* overlay = [[GHContextMenuView alloc] init];
+    overlay.dataSource = self;
+    overlay.delegate = self;
+
+    DeepGestureRecognizer *_deepGestureRecognizer = [[DeepGestureRecognizer alloc] initWithTarget:overlay action:@selector(deepPressDetected:) threshold:1.0];
+    [self.view addGestureRecognizer:_deepGestureRecognizer];
+
+
 // Implementing data source methods
 - (NSInteger) numberOfMenuItems
 {
