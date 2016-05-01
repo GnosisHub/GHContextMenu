@@ -180,36 +180,7 @@ CGFloat const   GHAnimationDelay = GHAnimationDuration/5;
 
 - (void)deepPressDetected:(UIGestureRecognizer*) gestureRecognizer
 {
-    if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
-        self.frame = [UIScreen mainScreen].bounds;
-        self.prevIndex = -1;
-        
-        CGPoint pointInView = [gestureRecognizer locationInView:gestureRecognizer.view];
-        if (self.dataSource != nil && [self.dataSource respondsToSelector:@selector(shouldShowMenuAtPoint:)] && ![self.dataSource shouldShowMenuAtPoint:pointInView]){
-            return;
-        }
-        
-        [[UIApplication sharedApplication].keyWindow addSubview:self];
-        self.longPressLocation = [gestureRecognizer locationInView:self];
-        
-        self.layer.backgroundColor = [UIColor colorWithWhite:0.1f alpha:.8f].CGColor;
-        self.isShowing = YES;
-        [self animateMenu:YES];
-        [self setNeedsDisplay];
-    }
-    
-    if (gestureRecognizer.state == UIGestureRecognizerStateChanged) {
-        if (self.isShowing && self.menuActionType == GHContextMenuActionTypePan) {
-            self.isPaning = YES;
-            self.curretnLocation =  [gestureRecognizer locationInView:self];
-        }
-    }
-    
-    // Only trigger if we're using the GHContextMenuActionTypePan (default)
-    if(gestureRecognizer.state == UIGestureRecognizerStateEnded && self.menuActionType == GHContextMenuActionTypePan ) {
-        CGPoint menuAtPoint = [self convertPoint:self.longPressLocation toView:gestureRecognizer.view];
-        [self dismissWithSelectedIndexForMenuAtPoint:menuAtPoint];
-    }
+    [self longPressDetected:gestureRecognizer];
 }
 
 - (void) showMenu
