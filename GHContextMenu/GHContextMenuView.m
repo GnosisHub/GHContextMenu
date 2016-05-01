@@ -178,6 +178,11 @@ CGFloat const   GHAnimationDelay = GHAnimationDuration/5;
     }
 }
 
+- (void)deepPressDetected:(UIGestureRecognizer*) gestureRecognizer
+{
+    [self longPressDetected:gestureRecognizer];
+}
+
 - (void) showMenu
 {
     
@@ -484,6 +489,63 @@ CGFloat const   GHAnimationDelay = GHAnimationDuration/5;
     // Drawing code
     if (self.isShowing) {
         [self drawCircle:self.longPressLocation];
+    }
+}
+@end
+
+
+/*
+ * 3D touch GestureRecognizer
+ */
+#import <AudioToolbox/AudioToolbox.h>
+#import <UIKit/UIGestureRecognizerSubclass.h>
+
+@interface DeepGestureRecognizer () {
+    BOOL is3DPress;
+}
+
+@end
+
+@implementation DeepGestureRecognizer
+- (instancetype)initWithTarget:(id)target action:(SEL)action threshold:(CGFloat)threshold {
+    if (self == [super initWithTarget:target action:action]) {
+        _threshold = threshold;
+        _vibrateOn3DPress = YES;
+        _dragMode = YES;
+        is3DPress = NO;
+    }
+    return self;
+}
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    [self handleTouch:[[touches allObjects] objectAtIndex:0]];
+}
+- (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    [self handleTouch:[[touches allObjects] objectAtIndex:0]];
+}
+- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    [super touchesEnded:touches withEvent:event];
+    if (_dragMode == YES) {
+        self.state = UIGestureRecognizerStateEnded;
+    } else {
+        self.state = (is3DPress ? UIGestureRecognizerStateEnded : UIGestureRecognizerStateFailed);
+    }
+    is3DPress = NO;
+}
+- (void)handleTouch:(UITouch*)touch {
+    //    if (touch.force != 0 && touch.maximumPossibleForce != 0) {
+    //        return;
+    //    }
+    if (!is3DPress && (touch.force/touch.maximumPossibleForce) >= _threshold) {
+        
+        if (_vibrateOn3DPress == YES) {
+            AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
+        }
+        
+        self.state = UIGestureRecognizerStateBegan;
+        is3DPress = YES;
+    } else if (is3DPress && (touch.force/touch.maximumPossibleForce) < _threshold && _dragMode == NO) {
+        self.state = UIGestureRecognizerStateEnded;
+        is3DPress = NO;
     }
 }
 @end

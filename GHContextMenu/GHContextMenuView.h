@@ -26,6 +26,7 @@ typedef NS_ENUM(NSInteger, GHContextMenuActionType){
 @property (nonatomic, assign) GHContextMenuActionType menuActionType;
 
 - (void) longPressDetected:(UIGestureRecognizer*) gestureRecognizer;
+- (void) deepPressDetected:(UIGestureRecognizer*) gestureRecognizer;
 
 @end
 
@@ -44,4 +45,15 @@ typedef NS_ENUM(NSInteger, GHContextMenuActionType){
 
 - (void) didSelectItemAtIndex:(NSInteger) selectedIndex forMenuAtPoint:(CGPoint) point;
 
+@end
+
+
+/*
+ * 3D touch GestureRecognizer
+ */
+@interface DeepGestureRecognizer : UIGestureRecognizer
+@property (nonatomic, readonly) CGFloat threshold;
+@property (nonatomic) BOOL vibrateOn3DPress;
+@property (nonatomic) BOOL dragMode;
+- (instancetype)initWithTarget:(id)target action:(SEL)action threshold:(CGFloat)threshold;
 @end
