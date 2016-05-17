@@ -12,8 +12,8 @@ Sample app contains examples of how to add context menu for UIView and UICollect
 
 * Add `GHContextMenuView` headers and implementations to your project (2 files total).
 * Include with `#import "GHContextMenuView.h"` to use it wherever you need.
-* Set and implement the `GHContextMenuViewDataSource` to provide data about the pages.
-* Set and implement the `GHContextMenuViewDelegate` to receive callback upon selection.
+* Set and implement the `GHContextOverlayViewDataSource` to provide data about the pages.
+* Set and implement the `GHContextOverlayViewDelegate` to receive callback upon selection.
 
 ### Sample Code
 ```objc
@@ -21,7 +21,7 @@ Sample app contains examples of how to add context menu for UIView and UICollect
     GHContextMenuView* overlay = [[GHContextMenuView alloc] init];
     overlay.dataSource = self;
     overlay.delegate = self;
-    
+
     UILongPressGestureRecognizer* _longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:overlay action:@selector(longPressDetected:)];
     [self.view addGestureRecognizer:_longPressRecognizer];
 
@@ -44,7 +44,7 @@ Sample app contains examples of how to add context menu for UIView and UICollect
         case 2:
             imageName = @"google-plus";
             break;
-            
+
         default:
             break;
     }
@@ -64,11 +64,11 @@ Sample app contains examples of how to add context menu for UIView and UICollect
         case 2:
             msg = @"Google Plus Selected";
             break;
-            
+
         default:
             break;
     }
-    
+
     UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:nil message:msg delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
     [alertView show];
 
@@ -83,4 +83,3 @@ Supporting configurations is one of the next steps. Any feature request is welco
 ###License :
 
 The MIT License
-
