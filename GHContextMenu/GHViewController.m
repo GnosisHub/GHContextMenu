@@ -67,7 +67,30 @@
     }
     return [UIImage imageNamed:imageName];
 }
-
+-(NSString *)titleForItemAtIndex:(NSInteger)index{
+    NSString* title = nil;
+    switch (index) {
+        case 0:
+            title = @"facebook-white";
+            break;
+        case 1:
+            title = @"twitter-white";
+            break;
+        case 2:
+            title = @"google-plus-white";
+            break;
+        case 3:
+            title = @"linkedin-white";
+            break;
+        case 4:
+            title = @"pinterest-white";
+            break;
+            
+        default:
+            break;
+    }
+    return title;
+}
 - (void) didSelectItemAtIndex:(NSInteger)selectedIndex forMenuAtPoint:(CGPoint)point
 {
     NSString* msg = nil;
