@@ -3,7 +3,7 @@
 ![alt tag](https://github.com/GnosisHub/GHContextMenu/blob/master/cmocv.gif)
 ![alt tag](https://github.com/GnosisHub/GHContextMenu/blob/master/cmocv5.gif)
 ![alt tag](https://github.com/GnosisHub/GHContextMenu/blob/master/cmov.gif)
-![alt tag](https://github.com/GnosisHub/GHContextMenu/blob/master/titles.gif)
+![alt tag](https://github.com/hennychen/GHContextMenu/blob/master/titles.gif)
 This is user friendly solution for showing context menu upon long press. It is inspired from the Pinterest iOS app
 
 ##How To Use
