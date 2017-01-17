@@ -283,6 +283,7 @@ CGFloat const   GHAnimationDelay = GHAnimationDuration/5;
         lbl.text = [self.menuItemTitles objectAtIndex:i];
         lbl.textColor = [UIColor whiteColor];
         lbl.font = [UIFont systemFontOfSize:12.0];
+        lbl.textAlignment = NSTextAlignmentCenter;
         lbl.center = CGPointMake(location.position.x, location.position.y+GHMainItemSize/2 +10);
         [self addSubview:lbl];
         
