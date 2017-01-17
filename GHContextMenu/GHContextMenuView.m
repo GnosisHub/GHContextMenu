@@ -11,8 +11,8 @@
 #define GHShowAnimationID @"GHContextMenuViewRriseAnimationID"
 #define GHDismissAnimationID @"GHContextMenuViewDismissAnimationID"
 
-NSInteger const GHMainItemSize = 44;
-NSInteger const GHMenuItemSize = 40;
+NSInteger const GHMainItemSize = 54;
+NSInteger const GHMenuItemSize = 50;
 NSInteger const GHBorderWidth  = 5;
 
 CGFloat const   GHAnimationDuration = 0.2;
@@ -23,6 +23,7 @@ CGFloat const   GHAnimationDelay = GHAnimationDuration/5;
 
 @property (nonatomic) CGPoint position;
 @property (nonatomic) CGFloat angle;
+@property (nonatomic,strong)NSString * itemTitle;
 
 @end
 
@@ -45,6 +46,7 @@ CGFloat const   GHAnimationDelay = GHAnimationDuration/5;
 @property (nonatomic) CGPoint curretnLocation;
 
 @property (nonatomic, strong) NSMutableArray* menuItems;
+@property (nonatomic, strong) NSMutableArray * menuItemTitles;
 
 @property (nonatomic) CGFloat radius;
 @property (nonatomic) CGFloat arcAngle;
@@ -79,6 +81,7 @@ CGFloat const   GHAnimationDelay = GHAnimationDuration/5;
         
         _menuItems = [NSMutableArray array];
         _itemLocations = [NSMutableArray array];
+        _menuItemTitles = [NSMutableArray array];
         _arcAngle = M_PI_2;
         _radius = 90;
         
@@ -192,6 +195,9 @@ CGFloat const   GHAnimationDelay = GHAnimationDuration/5;
         [self animateMenu:NO];
         [self setNeedsDisplay];
         [self removeFromSuperview];
+        for (UIView  * view in self.subviews) {
+            [view removeFromSuperview];
+        }
     }
 }
 
@@ -227,6 +233,7 @@ CGFloat const   GHAnimationDelay = GHAnimationDuration/5;
 - (void) reloadData
 {
     [self.menuItems removeAllObjects];
+    [self.menuItemTitles removeAllObjects];
     [self.itemLocations removeAllObjects];
     
     if (self.dataSource != nil) {
@@ -235,7 +242,11 @@ CGFloat const   GHAnimationDelay = GHAnimationDuration/5;
             UIImage* image = [self.dataSource imageForItemAtIndex:i];
             CALayer *layer = [self layerWithImage:image];
             [self.layer addSublayer:layer];
+            NSString * title = [self.dataSource titleForItemAtIndex:i];
+            
             [self.menuItems addObject:layer];
+            [self.menuItemTitles addObject:title];
+            
         }
     }
 }
@@ -266,6 +277,15 @@ CGFloat const   GHAnimationDelay = GHAnimationDuration/5;
             CGFloat angle = [UIDevice currentDevice].orientation == UIDeviceOrientationLandscapeLeft ? M_PI_2 : -M_PI_2;
             layer.transform = CATransform3DRotate(CATransform3DIdentity, angle, 0, 0, 1);
         }
+        
+        UILabel * lbl = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, GHMainItemSize, 20.0)];
+        
+        lbl.text = [self.menuItemTitles objectAtIndex:i];
+        lbl.textColor = [UIColor whiteColor];
+        lbl.font = [UIFont systemFontOfSize:12.0];
+        lbl.center = CGPointMake(location.position.x, location.position.y+GHMainItemSize/2 +10);
+        [self addSubview:lbl];
+        
     }
 }
 
