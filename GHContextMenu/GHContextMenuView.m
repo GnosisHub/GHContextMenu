@@ -55,6 +55,10 @@ CGFloat const   GHAnimationDelay = GHAnimationDuration/5;
 @property (nonatomic) CGColorRef itemBGHighlightedColor;
 @property (nonatomic) CGColorRef itemBGColor;
 
+@property (nonatomic, copy) NSArray *normalImages;
+@property (nonatomic, copy) NSArray *highlightImages;
+@property (nonatomic, copy) NSArray *titles;
+
 @end
 
 @implementation GHContextMenuView
@@ -228,15 +232,34 @@ CGFloat const   GHAnimationDelay = GHAnimationDuration/5;
 {
     [self.menuItems removeAllObjects];
     [self.itemLocations removeAllObjects];
+    NSMutableArray *normalImages = @[].mutableCopy;
+    NSMutableArray *highlightImages = @[].mutableCopy;
+    NSMutableArray *titles = @[].mutableCopy;
     
     if (self.dataSource != nil) {
         NSInteger count = [self.dataSource numberOfMenuItems];
         for (int i = 0; i < count; i++) {
             UIImage* image = [self.dataSource imageForItemAtIndex:i];
+            [normalImages addObject:image];
+            if ([self.dataSource respondsToSelector:@selector(highlightImageForItemAtIndex:)]) {
+                UIImage *highlightImage = [self.dataSource highlightImageForItemAtIndex:i];
+                [highlightImages addObject:highlightImage];
+            } else {
+                [highlightImages addObject:image];
+            }
+            if ([self.dataSource respondsToSelector:@selector(tipForItemAtIndex:)]) {
+                NSString *title = [self.dataSource tipForItemAtIndex:i];
+                [titles addObject:title];
+            } else {
+                [titles addObject:@""];
+            }
             CALayer *layer = [self layerWithImage:image];
             [self.layer addSublayer:layer];
             [self.menuItems addObject:layer];
         }
+        self.normalImages = normalImages.copy;
+        self.highlightImages = highlightImages.copy;
+        self.titles = titles.copy;
     }
 }
 
