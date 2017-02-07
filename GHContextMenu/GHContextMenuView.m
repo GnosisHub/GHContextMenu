@@ -57,7 +57,10 @@ CGFloat const   GHAnimationDelay = GHAnimationDuration/5;
 
 @property (nonatomic, copy) NSArray *normalImages;
 @property (nonatomic, copy) NSArray *highlightImages;
-@property (nonatomic, copy) NSArray *titles;
+@property (nonatomic, copy) NSArray *tips;
+
+@property (nonatomic, strong) UILabel *tipLabel;
+@property (nonatomic) CGRect tipLabelFrame;
 
 @end
 
@@ -88,7 +91,14 @@ CGFloat const   GHAnimationDelay = GHAnimationDuration/5;
         
         self.itemBGColor = [UIColor grayColor].CGColor;
         self.itemBGHighlightedColor = [UIColor redColor].CGColor;
-        
+        self.tipLabel = [[UILabel alloc] init];
+        if (self.tipFont) {
+            self.tipLabel.font = self.tipFont;
+        } else {
+            self.tipLabel.font = [UIFont boldSystemFontOfSize:36.0f];
+        }
+        self.tipLabel.text = @"啊啊啊";
+        [self addSubview:self.tipLabel];
     }
     return self;
 }
@@ -234,7 +244,7 @@ CGFloat const   GHAnimationDelay = GHAnimationDuration/5;
     [self.itemLocations removeAllObjects];
     NSMutableArray *normalImages = @[].mutableCopy;
     NSMutableArray *highlightImages = @[].mutableCopy;
-    NSMutableArray *titles = @[].mutableCopy;
+    NSMutableArray *tips = @[].mutableCopy;
     
     if (self.dataSource != nil) {
         NSInteger count = [self.dataSource numberOfMenuItems];
@@ -248,10 +258,10 @@ CGFloat const   GHAnimationDelay = GHAnimationDuration/5;
                 [highlightImages addObject:image];
             }
             if ([self.dataSource respondsToSelector:@selector(tipForItemAtIndex:)]) {
-                NSString *title = [self.dataSource tipForItemAtIndex:i];
-                [titles addObject:title];
+                NSString *tip = [self.dataSource tipForItemAtIndex:i];
+                [tips addObject:tip];
             } else {
-                [titles addObject:@""];
+                [tips addObject:@""];
             }
             CALayer *layer = [self layerWithImage:image];
             [self.layer addSublayer:layer];
@@ -259,7 +269,7 @@ CGFloat const   GHAnimationDelay = GHAnimationDuration/5;
         }
         self.normalImages = normalImages.copy;
         self.highlightImages = highlightImages.copy;
-        self.titles = titles.copy;
+        self.tips = tips.copy;
     }
 }
 
@@ -290,6 +300,29 @@ CGFloat const   GHAnimationDelay = GHAnimationDuration/5;
             layer.transform = CATransform3DRotate(CATransform3DIdentity, angle, 0, 0, 1);
         }
     }
+    
+    [self layoutTipLabel];
+}
+
+- (void)layoutTipLabel {
+    CGFloat dx = self.center.x - self.longPressLocation.x;
+    CGFloat dy = self.center.y - self.longPressLocation.y;
+    CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
+    CGPoint lableOrigin = CGPointZero;
+    if (dx >= 0) {
+        lableOrigin.x = screenWidth / 2.0f + 25.0f;
+    } else {
+        lableOrigin.x = 25.0f;
+    }
+    if (dy >= 0) {
+        lableOrigin.y = self.longPressLocation.y + 90.0f - 44.0f;
+    } else {
+        lableOrigin.y = self.longPressLocation.y - 90.0f;
+    }
+    
+    CGRect labelFrame = CGRectMake(lableOrigin.x, lableOrigin.y, 300.0f, 44.0f);
+    self.tipLabelFrame = labelFrame;
+    self.tipLabel.frame = labelFrame;
 }
 
 - (GHMenuItemLocation*) locationForItemAtIndex:(NSUInteger) index
@@ -345,7 +378,7 @@ CGFloat const   GHAnimationDelay = GHAnimationDuration/5;
     float bearingRadians = atan2f(originPoint.y, originPoint.x);
     
     bearingRadians = (bearingRadians > 0.0 ? bearingRadians : (M_PI*2 + bearingRadians));
-
+    
     return bearingRadians;
 }
 
@@ -374,10 +407,21 @@ CGFloat const   GHAnimationDelay = GHAnimationDuration/5;
             }
         }
         
+        CGFloat tipMove = self.curretnLocation.y - self.longPressLocation.y;
+        if (tipMove >= self.radius) {
+            tipMove = self.radius;
+        }
+        if (tipMove <= -self.radius) {
+            tipMove = -self.radius;
+        }
+        CGRect tipLabelFrame = self.tipLabelFrame;
+        tipLabelFrame.origin.y += tipMove / 7.0f;
+        self.tipLabel.frame = tipLabelFrame;
+        
         if (closeToIndex >= 0 && closeToIndex < self.menuItems.count) {
             
             GHMenuItemLocation* itemLocation = [self.itemLocations objectAtIndex:closeToIndex];
-
+            
             CGFloat distanceFromCenter = sqrt(pow(self.curretnLocation.x - self.longPressLocation.x, 2)+ pow(self.curretnLocation.y-self.longPressLocation.y, 2));
             
             CGFloat toleranceDistance = (self.radius - GHMainItemSize/(2*sqrt(2)) - GHMenuItemSize/(2*sqrt(2)) )/2;

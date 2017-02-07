@@ -27,6 +27,8 @@ typedef NS_ENUM(NSInteger, GHContextMenuActionType){
 
 - (void) longPressDetected:(UIGestureRecognizer*) gestureRecognizer;
 
+@property (nonatomic, strong) UIFont *tipFont;
+
 @end
 
 @protocol GHContextOverlayViewDataSource <NSObject>
