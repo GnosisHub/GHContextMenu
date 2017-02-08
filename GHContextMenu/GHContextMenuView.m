@@ -52,15 +52,13 @@ CGFloat const   GHAnimationDelay = GHAnimationDuration/5;
 @property (nonatomic, strong) NSMutableArray* itemLocations;
 @property (nonatomic) NSInteger prevIndex;
 
-@property (nonatomic) CGColorRef itemBGHighlightedColor;
-@property (nonatomic) CGColorRef itemBGColor;
-
 @property (nonatomic, copy) NSArray *normalImages;
 @property (nonatomic, copy) NSArray *highlightImages;
 @property (nonatomic, copy) NSArray *tips;
 
 @property (nonatomic, strong) UILabel *tipLabel;
 @property (nonatomic) CGRect tipLabelFrame;
+@property (nonatomic, strong) UIView *overlayView;
 
 @end
 
@@ -89,15 +87,17 @@ CGFloat const   GHAnimationDelay = GHAnimationDuration/5;
         _arcAngle = M_PI_2;
         _radius = 90;
         
-        self.itemBGColor = [UIColor grayColor].CGColor;
-        self.itemBGHighlightedColor = [UIColor redColor].CGColor;
         self.tipLabel = [[UILabel alloc] init];
         if (self.tipFont) {
             self.tipLabel.font = self.tipFont;
         } else {
             self.tipLabel.font = [UIFont boldSystemFontOfSize:36.0f];
         }
-        self.tipLabel.text = @"啊啊啊";
+        if (self.tipColor) {
+            self.tipLabel.textColor = self.tipColor;
+        } else {
+            self.tipLabel.textColor = [UIColor blackColor];
+        }
         [self addSubview:self.tipLabel];
     }
     return self;
@@ -171,8 +171,16 @@ CGFloat const   GHAnimationDelay = GHAnimationDuration/5;
         
         [[UIApplication sharedApplication].keyWindow addSubview:self];
         self.longPressLocation = [gestureRecognizer locationInView:self];
+        if ([self.dataSource respondsToSelector:@selector(overlayViewAtPoint:)]) {
+            self.overlayView = [self.dataSource overlayViewAtPoint:pointInView];
+            [self insertSubview:self.overlayView atIndex:0];
+        }
         
-        self.layer.backgroundColor = [UIColor colorWithWhite:0.1f alpha:.8f].CGColor;
+        UIColor *backgroundColor = [UIColor colorWithWhite:0.1f alpha:.8f];
+        if (self.menuViewBackgroundColor) {
+            backgroundColor = self.menuViewBackgroundColor;
+        }
+        self.layer.backgroundColor = self.menuViewBackgroundColor.CGColor;
         self.isShowing = YES;
         [self animateMenu:YES];
         [self setNeedsDisplay];
@@ -206,27 +214,18 @@ CGFloat const   GHAnimationDelay = GHAnimationDuration/5;
         [self animateMenu:NO];
         [self setNeedsDisplay];
         [self removeFromSuperview];
+        [self.overlayView removeFromSuperview];
     }
 }
 
 - (CALayer*) layerWithImage:(UIImage*) image
 {
-    CALayer *layer = [CALayer layer];
-    layer.bounds = CGRectMake(0, 0, GHMenuItemSize, GHMenuItemSize);
-    layer.cornerRadius = GHMenuItemSize/2;
-    layer.borderColor = [UIColor whiteColor].CGColor;
-    layer.borderWidth = GHBorderWidth;
-    layer.shadowColor = [UIColor blackColor].CGColor;
-    layer.shadowOffset = CGSizeMake(0, -1);
-    layer.backgroundColor = self.itemBGColor;
-    
     CALayer* imageLayer = [CALayer layer];
     imageLayer.contents = (id) image.CGImage;
     imageLayer.bounds = CGRectMake(0, 0, GHMenuItemSize*2/3, GHMenuItemSize*2/3);
     imageLayer.position = CGPointMake(GHMenuItemSize/2, GHMenuItemSize/2);
-    [layer addSublayer:imageLayer];
     
-    return layer;
+    return imageLayer;
 }
 
 - (void) setDataSource:(id<GHContextOverlayViewDataSource>)dataSource
@@ -263,7 +262,9 @@ CGFloat const   GHAnimationDelay = GHAnimationDuration/5;
             } else {
                 [tips addObject:@""];
             }
-            CALayer *layer = [self layerWithImage:image];
+            CALayer *imageLayer = [self layerWithImage:image];
+            CALayer *layer = [CALayer layer];
+            [layer addSublayer:imageLayer];
             [self.layer addSublayer:layer];
             [self.menuItems addObject:layer];
         }
@@ -315,9 +316,9 @@ CGFloat const   GHAnimationDelay = GHAnimationDuration/5;
         lableOrigin.x = 25.0f;
     }
     if (dy >= 0) {
-        lableOrigin.y = self.longPressLocation.y + 90.0f - 44.0f;
+        lableOrigin.y = self.longPressLocation.y + 150.0f - 44.0f;
     } else {
-        lableOrigin.y = self.longPressLocation.y - 90.0f;
+        lableOrigin.y = self.longPressLocation.y - 150.0f;
     }
     
     CGRect labelFrame = CGRectMake(lableOrigin.x, lableOrigin.y, 300.0f, 44.0f);
@@ -429,8 +430,15 @@ CGFloat const   GHAnimationDelay = GHAnimationDuration/5;
             CGFloat distanceFromItem = fabsf(distanceFromCenter - self.radius) - GHMenuItemSize/(2*sqrt(2)) ;
             
             if (fabs(distanceFromItem) < toleranceDistance ) {
+                [self showTips];
                 CALayer *layer = [self.menuItems objectAtIndex:closeToIndex];
-                layer.backgroundColor = self.itemBGHighlightedColor;
+                for (CALayer *sublayer in layer.sublayers) {
+                    [sublayer removeFromSuperlayer];
+                }
+                CALayer *imageLayer = [self layerWithImage:self.highlightImages[closeToIndex]];
+                [layer addSublayer:imageLayer];
+                
+                self.tipLabel.text = self.tips[closeToIndex];
                 
                 CGFloat distanceFromItemBorder = fabs(distanceFromItem);
                 
@@ -456,21 +464,45 @@ CGFloat const   GHAnimationDelay = GHAnimationDuration/5;
                 self.prevIndex = closeToIndex;
                 
             } else if(self.prevIndex >= 0) {
+                [self hideTips];
                 [self resetPreviousSelection];
             }
         }else {
+            [self hideTips];
             [self resetPreviousSelection];
         }
     }
+}
+
+- (void)showTips {
+    [self.tipLabel.layer removeAllAnimations];
+    [UIView animateWithDuration:0.1f delay:0.0f options:UIViewAnimationOptionBeginFromCurrentState animations:^{
+        self.tipLabel.alpha = 1.0f;
+    } completion:^(BOOL finished) {
+        
+    }];
+}
+
+- (void)hideTips {
+    [self.tipLabel.layer removeAllAnimations];
+    [UIView animateWithDuration:0.1f delay:0.0f options:UIViewAnimationOptionBeginFromCurrentState animations:^{
+        self.tipLabel.alpha = 0.0f;
+    } completion:^(BOOL finished) {
+        
+    }];
 }
 
 - (void) resetPreviousSelection
 {
     if (self.prevIndex >= 0) {
         CALayer *layer = self.menuItems[self.prevIndex];
+        for (CALayer *sublayer in layer.sublayers) {
+            [sublayer removeFromSuperlayer];
+        }
+        CALayer *imageLayer = [self layerWithImage:self.normalImages[self.prevIndex]];
+        [layer addSublayer:imageLayer];
         GHMenuItemLocation* itemLocation = [self.itemLocations objectAtIndex:self.prevIndex];
         layer.position = itemLocation.position;
-        layer.backgroundColor = self.itemBGColor;
         layer.transform = CATransform3DIdentity;
         self.prevIndex = -1;
     }
@@ -527,7 +559,6 @@ CGFloat const   GHAnimationDelay = GHAnimationDuration/5;
         [CATransaction begin];
         [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
         layer.position = toPosition;
-        layer.backgroundColor = self.itemBGColor;
         layer.opacity = 0.0f;
         layer.transform = CATransform3DIdentity;
         [CATransaction commit];

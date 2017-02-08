@@ -68,6 +68,31 @@
     return [UIImage imageNamed:imageName];
 }
 
+- (UIImage *)highlightImageForItemAtIndex:(NSInteger)index {
+    NSString* imageName = nil;
+    switch (index) {
+        case 1:
+            imageName = @"facebook-white";
+            break;
+        case 2:
+            imageName = @"twitter-white";
+            break;
+        case 3:
+            imageName = @"google-plus-white";
+            break;
+        case 4:
+            imageName = @"linkedin-white";
+            break;
+        case 0:
+            imageName = @"pinterest-white";
+            break;
+            
+        default:
+            break;
+    }
+    return [UIImage imageNamed:imageName];
+}
+
 - (void) didSelectItemAtIndex:(NSInteger)selectedIndex forMenuAtPoint:(CGPoint)point
 {
     NSString* msg = nil;
@@ -95,6 +120,10 @@
     UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:nil message:msg delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
     [alertView show];
 
+}
+
+- (NSString *)tipForItemAtIndex:(NSInteger)index {
+    return [NSString stringWithFormat:@"tip %@", @(index)];
 }
 
 @end

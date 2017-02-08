@@ -29,6 +29,7 @@
     [super viewDidLoad];
     
     GHContextMenuView* overlay = [[GHContextMenuView alloc] init];
+    overlay.menuViewBackgroundColor = [UIColor whiteColor];
     overlay.dataSource = self;
     overlay.delegate = self;
 
@@ -143,5 +144,20 @@
     
 }
 
+- (NSString *)tipForItemAtIndex:(NSInteger)index {
+    return [NSString stringWithFormat:@"tip %@", @(index)];
+}
+
+- (UIView *)overlayViewAtPoint:(CGPoint)point {
+    NSIndexPath *indexPath = [self.collectionView indexPathForItemAtPoint:point];
+    UICollectionViewCell *cell = [self.collectionView cellForItemAtIndexPath:indexPath];
+    CGPoint origin = cell.frame.origin;
+    origin = [self.view convertPoint:origin fromView:self.collectionView];
+    UIView *snap = [cell snapshotViewAfterScreenUpdates:NO];
+    CGRect snapFrame = cell.bounds;
+    snapFrame.origin = origin;
+    snap.frame = snapFrame;
+    return snap;
+}
 
 @end
