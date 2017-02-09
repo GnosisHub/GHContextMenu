@@ -27,6 +27,10 @@ typedef NS_ENUM(NSInteger, GHContextMenuActionType){
 
 - (void) longPressDetected:(UIGestureRecognizer*) gestureRecognizer;
 
+@property (nonatomic, strong) UIFont *tipFont;
+@property (nonatomic, strong) UIColor *tipColor;
+@property (nonatomic, strong) UIColor *menuViewBackgroundColor;
+
 @end
 
 @protocol GHContextOverlayViewDataSource <NSObject>
@@ -37,6 +41,9 @@ typedef NS_ENUM(NSInteger, GHContextMenuActionType){
 
 @optional
 -(BOOL) shouldShowMenuAtPoint:(CGPoint) point;
+- (UIImage*) highlightImageForItemAtIndex:(NSInteger) index;
+- (NSString*) tipForItemAtIndex:(NSInteger) index;
+- (UIView *) overlayViewAtPoint:(CGPoint) point;
 
 @end
 

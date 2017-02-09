@@ -29,8 +29,10 @@
     [super viewDidLoad];
     
     GHContextMenuView* overlay = [[GHContextMenuView alloc] init];
+    overlay.menuViewBackgroundColor = [UIColor whiteColor];
     overlay.dataSource = self;
     overlay.delegate = self;
+    overlay.menuViewBackgroundColor = [UIColor colorWithWhite:1.0f alpha:0.85f];
 
 	// Do any additional setup after loading the view.
 //    [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
@@ -89,21 +91,32 @@
     NSString* imageName = nil;
     switch (index) {
         case 0:
-            imageName = @"facebook-white";
+            imageName = @"gp";
             break;
         case 1:
-            imageName = @"twitter-white";
+            imageName = @"p";
             break;
         case 2:
-            imageName = @"google-plus-white";
+            imageName = @"t";
             break;
-        case 3:
-            imageName = @"linkedin-white";
+        default:
             break;
-        case 4:
-            imageName = @"pinterest-white";
+    }
+    return [UIImage imageNamed:imageName];
+}
+
+- (UIImage *)highlightImageForItemAtIndex:(NSInteger)index {
+    NSString* imageName = nil;
+    switch (index) {
+        case 0:
+            imageName = @"gps";
             break;
-            
+        case 1:
+            imageName = @"ps";
+            break;
+        case 2:
+            imageName = @"ts";
+            break;
         default:
             break;
     }
@@ -117,21 +130,14 @@
     NSString* msg = nil;
     switch (selectedIndex) {
         case 0:
-            msg = @"Facebook Selected";
+            msg = @"Google+ Selected";
             break;
         case 1:
-            msg = @"Twitter Selected";
-            break;
-        case 2:
-            msg = @"Google Plus Selected";
-            break;
-        case 3:
-            msg = @"Linkedin Selected";
-            break;
-        case 4:
             msg = @"Pinterest Selected";
             break;
-            
+        case 2:
+            msg = @"Twitter Selected";
+            break;
         default:
             break;
     }
@@ -143,5 +149,34 @@
     
 }
 
+- (NSString *)tipForItemAtIndex:(NSInteger)index {
+    NSString* tip = @"";
+    switch (index) {
+        case 0:
+            tip = @"Google+";
+            break;
+        case 1:
+            tip = @"Pinterest";
+            break;
+        case 2:
+            tip = @"Twitter";
+            break;
+        default:
+            break;
+    }
+    return tip;
+}
+
+- (UIView *)overlayViewAtPoint:(CGPoint)point {
+    NSIndexPath *indexPath = [self.collectionView indexPathForItemAtPoint:point];
+    UICollectionViewCell *cell = [self.collectionView cellForItemAtIndexPath:indexPath];
+    CGPoint origin = cell.frame.origin;
+    origin = [self.view convertPoint:origin fromView:self.collectionView];
+    UIView *snap = [cell snapshotViewAfterScreenUpdates:NO];
+    CGRect snapFrame = cell.bounds;
+    snapFrame.origin = origin;
+    snap.frame = snapFrame;
+    return snap;
+}
 
 @end
