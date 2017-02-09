@@ -17,15 +17,26 @@ Sample app contains examples of how to add context menu for UIView and UICollect
 
 ### Sample Code
 ```objc
-// Creating
+// create menu overlay
     GHContextMenuView* overlay = [[GHContextMenuView alloc] init];
+    overlay.menuViewBackgroundColor = [UIColor whiteColor];
     overlay.dataSource = self;
     overlay.delegate = self;
-    
-    UILongPressGestureRecognizer* _longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:overlay action:@selector(longPressDetected:)];
-    [self.view addGestureRecognizer:_longPressRecognizer];
+    overlay.menuViewBackgroundColor = [UIColor colorWithWhite:1.0f alpha:0.85f];
 
-// Implementing data source methods
+    UILongPressGestureRecognizer* _longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:overlay action:@selector(longPressDetected:)];
+    [self.collectionView addGestureRecognizer:_longPressRecognizer];
+
+
+// implement delegate
+-(BOOL) shouldShowMenuAtPoint:(CGPoint)point
+{
+    NSIndexPath* indexPath = [self.collectionView indexPathForItemAtPoint:point];
+    UICollectionViewCell* cell = [self.collectionView cellForItemAtIndexPath:indexPath];
+    
+    return cell != nil;
+}
+
 - (NSInteger) numberOfMenuItems
 {
     return 3;
@@ -36,15 +47,32 @@ Sample app contains examples of how to add context menu for UIView and UICollect
     NSString* imageName = nil;
     switch (index) {
         case 0:
-            imageName = @"facebook";
+            imageName = @"gp";
             break;
         case 1:
-            imageName = @"twitter";
+            imageName = @"p";
             break;
         case 2:
-            imageName = @"google-plus";
+            imageName = @"t";
             break;
-            
+        default:
+            break;
+    }
+    return [UIImage imageNamed:imageName];
+}
+
+- (UIImage *)highlightImageForItemAtIndex:(NSInteger)index {
+    NSString* imageName = nil;
+    switch (index) {
+        case 0:
+            imageName = @"gps";
+            break;
+        case 1:
+            imageName = @"ps";
+            break;
+        case 2:
+            imageName = @"ts";
+            break;
         default:
             break;
     }
@@ -53,27 +81,59 @@ Sample app contains examples of how to add context menu for UIView and UICollect
 
 - (void) didSelectItemAtIndex:(NSInteger)selectedIndex forMenuAtPoint:(CGPoint)point
 {
+    NSIndexPath* indexPath = [self.collectionView indexPathForItemAtPoint:point];
+
     NSString* msg = nil;
     switch (selectedIndex) {
         case 0:
-            msg = @"Facebook Selected";
+            msg = @"Google+ Selected";
             break;
         case 1:
-            msg = @"Twitter Selected";
+            msg = @"Pinterest Selected";
             break;
         case 2:
-            msg = @"Google Plus Selected";
+            msg = @"Twitter Selected";
             break;
-            
         default:
             break;
     }
     
+    msg = [msg stringByAppendingFormat:@" for cell %ld", (long)indexPath.row +1];
+    
     UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:nil message:msg delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
     [alertView show];
-
+    
 }
 
+- (NSString *)tipForItemAtIndex:(NSInteger)index {
+    NSString* tip = @"";
+    switch (index) {
+        case 0:
+            tip = @"Google+";
+            break;
+        case 1:
+            tip = @"Pinterest";
+            break;
+        case 2:
+            tip = @"Twitter";
+            break;
+        default:
+            break;
+    }
+    return tip;
+}
+
+- (UIView *)overlayViewAtPoint:(CGPoint)point {
+    NSIndexPath *indexPath = [self.collectionView indexPathForItemAtPoint:point];
+    UICollectionViewCell *cell = [self.collectionView cellForItemAtIndexPath:indexPath];
+    CGPoint origin = cell.frame.origin;
+    origin = [self.view convertPoint:origin fromView:self.collectionView];
+    UIView *snap = [cell snapshotViewAfterScreenUpdates:NO];
+    CGRect snapFrame = cell.bounds;
+    snapFrame.origin = origin;
+    snap.frame = snapFrame;
+    return snap;
+}
 ```
 
 ###Next Steps:
@@ -83,4 +143,10 @@ Supporting configurations is one of the next steps. Any feature request is welco
 ###License :
 
 The MIT License
+
+
+
+### Thanks:
+
+Icons from http://www.designcrawl.com/48-free-hollow-and-solid-fill-circle-icons/
 
