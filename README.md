@@ -1,4 +1,4 @@
-#GHContextMenu - Pinterest like context menu control for iOS
+# GHContextMenu - Pinterest like context menu control for iOS
 
 ![alt tag](https://github.com/GnosisHub/GHContextMenu/blob/master/cmocv.gif)
 ![alt tag](https://github.com/GnosisHub/GHContextMenu/blob/master/cmocv5.gif)
@@ -6,7 +6,7 @@
 
 This is user friendly solution for showing context menu upon long press. It is inspired from the Pinterest iOS app
 
-##How To Use
+## How To Use
 
 Sample app contains examples of how to add context menu for UIView and UICollectionView
 
@@ -76,11 +76,11 @@ Sample app contains examples of how to add context menu for UIView and UICollect
 
 ```
 
-###Next Steps:
+### Next Steps:
 Supporting configurations is one of the next steps. Any feature request is welcome. Raise an issue with a feature tag and I will look into it
 
 
-###License :
+### License :
 
 The MIT License
 
